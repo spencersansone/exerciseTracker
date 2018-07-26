@@ -1,0 +1,33 @@
+{% extends 'main/base.html' %}
+
+{% block title %}ENTERTITLEHERE{% endblock %}
+
+{% block body %}
+<div class="col-sm-12">
+    <form role="form" action="{% url 'main:add_exercise' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" name="title" aria-describedby="title" placeholder="Enter title">
+        </div>
+      
+        <div class="form-group">
+            <label for="focus">Focus</label>
+            <select class="form-control" name="focus">
+                {% for focus in focuses %}
+                <option>{{focus}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" name="weight_involved">
+            <label class="form-check-label" for="weight_involved">Weights Involved?</label>
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+{% endblock %}
