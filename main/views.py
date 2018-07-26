@@ -1,23 +1,29 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import requests
 from .models import *
 
 def home(request):
     return render(request, 'main/home.html')
     
+def focuses(request):
+    x = {}
+    x['focuses'] = Focus.objects.all()
+    return render(request, 'main/focuses.html', x)
+    
 def exercises(request):
     x = {}
     x['exercises'] = Exercise.objects.all()
     return render(request, 'main/exercises.html', x)
     
+    
+
 def add_exercise(request):
     if request.method == "POST":
         t = request.POST.get('title')
         print(t)
         f = request.POST.get('focus')
         print(f)
-        wi = request.POST.get('weight_involved')
-        wi = True if wi == "on" else False
+        wi = True if request.POST.get('weight_involved') == "on" else False
         print(wi)
         
         
@@ -26,6 +32,8 @@ def add_exercise(request):
             focus = Focus.objects.get(
                 name = f),
             weight_involved = wi)
+            
+        return redirect('main:exercises')
     else:
         x = {}
         x['focuses'] = Focus.objects.all()
@@ -34,6 +42,28 @@ def add_exercise(request):
 def exercise_entries(request):
     x = {}
     x['exercise_entries'] = ExerciseEntry.objects.all()
-    return render(request, 'main/exerciseEntries.html')
+    return render(request, 'main/exercise_entries.html', x)
+    
+def add_exercise_entry(request):
+    if request.method == "POST":
+        d = request.POST.get('date')
+        e = request.POST.get('exercise')
+        pass
+        return redirect('main:exercise_entries')
+    else:
+        x = {}
+        x['exercises'] = Exercise.objects.all()
+        return render(request, 'main/add_exercise_entry.html', x)
+        
+def add_focus(request):
+    if request.method == "POST":
+        n = request.POST.get('name')
+        
+        Focus.objects.create(
+            name = n)
+            
+        return redirect('main:focuses')
+    else:
+        return render(request, 'main/add_focus.html')
 
 # Create your views here.

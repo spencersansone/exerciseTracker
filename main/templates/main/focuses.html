@@ -4,9 +4,9 @@
 
 {% block body %}
 <div class="col-sm-12">
-    <a href="{% url 'main:add_exercise' %}"><h1>Add New Exercise</h1></a>
-    {% for exercise in exercises %}
-    <h1>{{exercise}}</h1>
+    <a href="{% url 'main:add_focus' %}"><h1>Add New Focus</h1></a>
+    {% for focus in focuses %}
+    <h1>{{focus}}</h1>
     {% endfor %}
 </div>
 {% endblock %}

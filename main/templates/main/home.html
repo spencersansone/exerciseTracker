@@ -4,6 +4,8 @@
 
 {% block body %}
 <div class="col-sm-12">
-    <h1>Hello World!</h1>
+    <a href="{% url 'main:exercises' %}"><h1>Exercises</h1></a>
+    <a href="{% url 'main:exercise_entries' %}"><h1>Exercise Entries</h1></a>
+    <a href="{% url 'main:focuses' %}"><h1>Focuses</h1></a>
 </div>
 {% endblock %}
