@@ -1,0 +1,22 @@
+{% extends 'main/base.html' %}
+
+{% block title %}ENTERTITLEHERE{% endblock %}
+
+{% block body %}
+<div class="col-sm-12">
+    <h1>Are you sure that you want to delete {{certain_focus}}?</h1>
+    <form role="form" action="{% url 'main:delete_focus' pk=certain_pk %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Yes</button>
+            <button type="button" class="btn btn-primary" onclick="window.history.go(-1)">NO</button>
+            
+        </div>
+        
+        
+        
+        
+    </form>
+</div>
+{% endblock %}

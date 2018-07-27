@@ -4,19 +4,42 @@ from .models import *
 
 def home(request):
     return render(request, 'main/home.html')
-    
+
+#==================================================================
+
 def focuses(request):
     x = {}
     x['focuses'] = Focus.objects.all()
     return render(request, 'main/focuses.html', x)
-    
+
+def add_focus(request):
+    if request.method == "POST":
+        n = request.POST.get('name')
+        
+        Focus.objects.create(
+            name = n)
+            
+        return redirect('main:focuses')
+    else:
+        return render(request, 'main/add_focus.html')
+
+def delete_focus(request, pk):
+    if request.method == "POST":
+        Focus.objects.get(pk=pk).delete()
+        return redirect('main:focuses')
+    else:
+        x = {}
+        x['certain_focus'] = Focus.objects.get(pk=pk)
+        x['certain_pk'] = pk
+        return render(request, 'main/delete_focus.html', x)
+
+#==================================================================
+
 def exercises(request):
     x = {}
     x['exercises'] = Exercise.objects.all()
     return render(request, 'main/exercises.html', x)
     
-    
-
 def add_exercise(request):
     if request.method == "POST":
         t = request.POST.get('title')
@@ -38,6 +61,8 @@ def add_exercise(request):
         x = {}
         x['focuses'] = Focus.objects.all()
         return render(request, 'main/add_exercise.html', x)
+
+#==================================================================
     
 def exercise_entries(request):
     x = {}
@@ -55,15 +80,8 @@ def add_exercise_entry(request):
         x['exercises'] = Exercise.objects.all()
         return render(request, 'main/add_exercise_entry.html', x)
         
-def add_focus(request):
-    if request.method == "POST":
-        n = request.POST.get('name')
+#==================================================================
         
-        Focus.objects.create(
-            name = n)
-            
-        return redirect('main:focuses')
-    else:
-        return render(request, 'main/add_focus.html')
+
 
 # Create your views here.
