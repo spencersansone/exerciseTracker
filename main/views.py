@@ -42,16 +42,12 @@ def exercises(request):
     
 def add_exercise(request):
     if request.method == "POST":
-        t = request.POST.get('title')
-        print(t)
+        n = request.POST.get('name')
         f = request.POST.get('focus')
-        print(f)
         wi = True if request.POST.get('weight_involved') == "on" else False
-        print(wi)
-        
         
         Exercise.objects.create(
-            title = t,
+            name = n,
             focus = Focus.objects.get(
                 name = f),
             weight_involved = wi)
@@ -61,6 +57,16 @@ def add_exercise(request):
         x = {}
         x['focuses'] = Focus.objects.all()
         return render(request, 'main/add_exercise.html', x)
+
+def delete_exercise(request, pk):
+    if request.method == "POST":
+        Exercise.objects.get(pk=pk).delete()
+        return redirect('main:exercises')
+    else:
+        x = {}
+        x['certain_exercise'] = Exercise.objects.get(pk=pk)
+        x['certain_pk'] = pk
+        return render(request, 'main/delete_exercise.html', x)
 
 #==================================================================
     
@@ -73,7 +79,14 @@ def add_exercise_entry(request):
     if request.method == "POST":
         d = request.POST.get('date')
         e = request.POST.get('exercise')
-        pass
+        w = request.POST.get('weight')
+        
+        ExerciseEntry.objects.create(
+            date = d,
+            exercise = Exercise.objects.get(name))
+            
+        return redirect('main:exercises')
+        
         return redirect('main:exercise_entries')
     else:
         x = {}

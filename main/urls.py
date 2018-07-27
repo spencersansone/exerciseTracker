@@ -11,5 +11,6 @@ urlpatterns = [
     url(r'^add_exercise_entry/$', views.add_exercise_entry, name='add_exercise_entry'),
     url(r'^add_focus/$', views.add_focus, name='add_focus'),
     url(r'^delete_focus/(?P<pk>[0-9]+)/$', views.delete_focus, name='delete_focus'),
+    url(r'^delete_exercise/(?P<pk>[0-9]+)/$', views.delete_exercise, name='delete_exercise'),
     url(r'^focuses/$', views.focuses, name='focuses'),
 ]

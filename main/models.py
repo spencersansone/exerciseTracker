@@ -7,12 +7,12 @@ class Focus(models.Model):
         return self.name
 
 class Exercise(models.Model):
-    title = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
     focus = models.ForeignKey(Focus, on_delete=models.CASCADE)
     weight_involved = models.BooleanField()
     
     def __str__(self):
-        return self.title
+        return self.name
     
 class ExerciseEntry(models.Model):
     date = models.DateField()

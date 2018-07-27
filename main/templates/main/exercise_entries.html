@@ -5,7 +5,7 @@
 {% block body %}
 <div class="col-sm-12">
     <a href="{% url 'main:add_exercise_entry' %}"><h1>Add New Exercise Entry</h1></a>
-    {% for exercise in exercises %}
+    {% for exercise in exercise_entries %}
     <h1>{{exercise}}</h1>
     {% endfor %}
 </div>
