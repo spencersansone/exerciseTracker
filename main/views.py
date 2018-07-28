@@ -33,7 +33,7 @@ def today(request):
 
 def focuses(request):
     x = {}
-    x['focuses'] = Focus.objects.all()
+    x['focuses'] = Focus.objects.all().order_by('name')
     return render(request, 'main/focuses.html', x)
 
 def add_focus(request):
@@ -61,7 +61,7 @@ def delete_focus(request, pk):
 
 def exercises(request):
     x = {}
-    x['exercises'] = Exercise.objects.all()
+    x['exercises'] = Exercise.objects.all().order_by('name')
     return render(request, 'main/exercises.html', x)
     
 def add_exercise(request):
