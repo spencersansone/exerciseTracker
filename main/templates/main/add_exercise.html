@@ -7,12 +7,6 @@
     <form role="form" action="{% url 'main:add_exercise' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         
-        
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" class="form-control" name="name" placeholder="Enter name">
-        </div>
-      
         <div class="form-group">
             <label for="focus">Focus <a href="{% url 'main:add_focus' %}">(Add New)</a></label>
             <select class="form-control" name="focus">
@@ -22,9 +16,39 @@
             </select>
         </div>
         
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" name="name" placeholder="Enter name">
+        </div>
+      
+        
+        
         <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" name="weight_involved">
             <label class="form-check-label" for="weight_involved">Weights Involved?</label>
+        </div>
+        
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" name="sunday">
+            <label class="form-check-label" for="weight_involved">Sunday</label>
+            <br>
+            <input type="checkbox" class="form-check-input" name="monday">
+            <label class="form-check-label" for="weight_involved">Monday</label>
+            <br>
+            <input type="checkbox" class="form-check-input" name="tuesday">
+            <label class="form-check-label" for="weight_involved">Tuesday</label>
+            <br>
+            <input type="checkbox" class="form-check-input" name="wednesday">
+            <label class="form-check-label" for="weight_involved">Wednesday</label>
+            <br>
+            <input type="checkbox" class="form-check-input" name="thursday">
+            <label class="form-check-label" for="weight_involved">Thursday</label>
+            <br>
+            <input type="checkbox" class="form-check-input" name="friday">
+            <label class="form-check-label" for="weight_involved">Friday</label>
+            <br>
+            <input type="checkbox" class="form-check-input" name="saturday">
+            <label class="form-check-label" for="weight_involved">Saturday</label>
         </div>
         
         <button type="submit" class="btn btn-primary">Submit</button>

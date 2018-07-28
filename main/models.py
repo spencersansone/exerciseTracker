@@ -11,6 +11,14 @@ class Exercise(models.Model):
     focus = models.ForeignKey(Focus, on_delete=models.CASCADE)
     weight_involved = models.BooleanField()
     
+    sunday = models.BooleanField()
+    monday = models.BooleanField()
+    tuesday = models.BooleanField()
+    wednesday = models.BooleanField()
+    thursday = models.BooleanField()
+    friday = models.BooleanField()
+    saturday = models.BooleanField()
+    
     def __str__(self):
         return self.name
     
