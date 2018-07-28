@@ -5,13 +5,38 @@
 {% block body %}
 <div class="col-sm-12">
     <h1>{{today_weekday}}</h1>
+    <h1>{{var}}</h1>
     <br>
+    
     {% for a in var %}
-    <h2>{{a.0}}</h2>
-    {% for b in a.1 %}
-    <h6>{{b}}</h6>
+        <h2>{{a.0}}</h2>
+        {% for b in a.1 %}
+            <h2>{{b}}</h2>
+            {% if not b.1 %}
+                {% if b.0.weight_involved %}
+                <form>
+                  <div class="form-group">
+                    <label for="weight">Weight</label>
+                    <input type="number" class="form-control" name="weight" placeholder="Enter weight">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                {% else %}
+                <form>
+                  <div class="form-group">
+                    <input type="hidden" class="form-control" name="weight" value=-1>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+                
+                {% endif %}
+
+            {% else %}
+        
+            {% endif %}
+        {% endfor %}
+        <br>
     {% endfor %}
-    <br>
-    {% endfor %}
+    
 </div>
 {% endblock %}

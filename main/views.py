@@ -45,7 +45,7 @@ def today(request):
         saturday = Exercise.objects.filter(saturday=True),
         sunday = Exercise.objects.filter(sunday=True))
         
-        
+    today = datetime.now().date()
     # today_weekday = weekday_array[datetime.now().date().weekday()]
     today_weekday = weekday_array[1]
     today_exercises = model_filter_choices[today_weekday]
@@ -61,7 +61,16 @@ def today(request):
         filtered_exercises = filtered_exercises.filter(**filter_dict)
         exercise_array = []
         for exercise in filtered_exercises:
-            exercise_array += [exercise]
+            doneToday = False
+            
+            entries_done_today = ExerciseEntry.objects.filter(
+                date=today,
+                exercise=exercise)
+                
+            if len(entries_done_today) is not 0:
+                doneToday = True
+                
+            exercise_array += [[exercise,doneToday]]
         if len(exercise_array) is not 0:
             array += [[focus,exercise_array]]
         
