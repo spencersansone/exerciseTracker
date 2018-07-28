@@ -4,9 +4,14 @@
 
 {% block body %}
 <div class="col-sm-12">
-    <a href="{% url 'main:dashboard' %}"><h1>Dash</h1></a>
-    <a href="{% url 'main:exercises' %}"><h1>Exercises</h1></a>
-    <a href="{% url 'main:exercise_entries' %}"><h1>Exercise Entries</h1></a>
-    <a href="{% url 'main:focuses' %}"><h1>Focuses</h1></a>
+    <h1>{{today_weekday}}</h1>
+    <br>
+    {% for a in var %}
+    <h2>{{a.0}}</h2>
+    {% for b in a.1 %}
+    <h6>{{b}}</h6>
+    {% endfor %}
+    <br>
+    {% endfor %}
 </div>
 {% endblock %}

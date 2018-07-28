@@ -3,6 +3,15 @@ import requests
 from .models import *
 from datetime import datetime
 
+weekday_array = [
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+    "sunday"]
+
 
 def home(request):
     return render(request, 'main/home.html')
@@ -27,7 +36,43 @@ def dashboard(request):
     return render(request, 'main/dashboard.html', x)
     
 def today(request):
-    pass
+    model_filter_choices = dict(
+        monday = Exercise.objects.filter(monday=True),
+        tuesday = Exercise.objects.filter(tuesday=True),
+        wednesday = Exercise.objects.filter(wednesday=True),
+        thursday = Exercise.objects.filter(thursday=True),
+        friday = Exercise.objects.filter(friday=True),
+        saturday = Exercise.objects.filter(saturday=True),
+        sunday = Exercise.objects.filter(sunday=True))
+        
+        
+    # today_weekday = weekday_array[datetime.now().date().weekday()]
+    today_weekday = weekday_array[1]
+    today_exercises = model_filter_choices[today_weekday]
+    filter_dict = {today_weekday: True}
+    
+    focusesObj = Focus.objects.all()
+    exercisesObj = Exercise.objects.all()
+    
+    array = []
+    
+    for focus in focusesObj:
+        filtered_exercises = Exercise.objects.filter(focus=focus)
+        filtered_exercises = filtered_exercises.filter(**filter_dict)
+        exercise_array = []
+        for exercise in filtered_exercises:
+            exercise_array += [exercise]
+        if len(exercise_array) is not 0:
+            array += [[focus,exercise_array]]
+        
+    
+    x = {}
+    x['today_weekday'] = today_weekday.capitalize()
+    x['today_exercises'] = today_exercises
+    x['var'] = array
+    return render(request, 'main/today.html', x)
+    
+    
     
 #==================================================================
 

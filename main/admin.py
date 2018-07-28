@@ -8,7 +8,7 @@ class FocusList(admin.ModelAdmin):
 admin.site.register(Focus, FocusList)
 
 class ExerciseList(admin.ModelAdmin):
-    list_display = ('name','focus','weight_involved',)
+    list_display = ('name','focus','weight_involved','sunday','monday','tuesday','wednesday','thursday','friday','saturday',)
     ordering = ['id']
 
 admin.site.register(Exercise, ExerciseList)
