@@ -14,17 +14,21 @@
             <h2>{{b}}</h2>
             {% if not b.1 %}
                 {% if b.0.weight_involved %}
-                <form>
+                <form role="form" action="{% url 'main:today' %}" method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
                   <div class="form-group">
                     <label for="weight">Weight</label>
                     <input type="number" class="form-control" name="weight" placeholder="Enter weight">
+                    <input type="hidden" class="form-control" name="exercise_id" value={{b.0.id}}>
                   </div>
                   <button type="submit" class="btn btn-primary">Submit</button>
                 </form>
                 {% else %}
-                <form>
+                <form role="form" action="{% url 'main:today' %}" method="post" enctype="multipart/form-data">
+                  {% csrf_token %}
                   <div class="form-group">
                     <input type="hidden" class="form-control" name="weight" value=-1>
+                    <input type="hidden" class="form-control" name="exercise_id" value={{b.0.id}}>
                   </div>
                   <button type="submit" class="btn btn-primary">Submit</button>
                 </form>

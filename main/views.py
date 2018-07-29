@@ -36,19 +36,8 @@ def dashboard(request):
     return render(request, 'main/dashboard.html', x)
     
 def today(request):
-    model_filter_choices = dict(
-        monday = Exercise.objects.filter(monday=True),
-        tuesday = Exercise.objects.filter(tuesday=True),
-        wednesday = Exercise.objects.filter(wednesday=True),
-        thursday = Exercise.objects.filter(thursday=True),
-        friday = Exercise.objects.filter(friday=True),
-        saturday = Exercise.objects.filter(saturday=True),
-        sunday = Exercise.objects.filter(sunday=True))
-        
     today = datetime.now().date()
-    # today_weekday = weekday_array[datetime.now().date().weekday()]
     today_weekday = weekday_array[1]
-    today_exercises = model_filter_choices[today_weekday]
     filter_dict = {today_weekday: True}
     
     focusesObj = Focus.objects.all()
@@ -66,6 +55,7 @@ def today(request):
             entries_done_today = ExerciseEntry.objects.filter(
                 date=today,
                 exercise=exercise)
+            print(entries_done_today)
                 
             if len(entries_done_today) is not 0:
                 doneToday = True
@@ -73,13 +63,23 @@ def today(request):
             exercise_array += [[exercise,doneToday]]
         if len(exercise_array) is not 0:
             array += [[focus,exercise_array]]
-        
-    
     x = {}
     x['today_weekday'] = today_weekday.capitalize()
-    x['today_exercises'] = today_exercises
     x['var'] = array
-    return render(request, 'main/today.html', x)
+            
+    if request.method == "POST":
+        w = request.POST.get('weight')
+        e_id = request.POST.get('exercise_id')
+        
+        ExerciseEntry.objects.create(
+            date = today,
+            exercise = Exercise.objects.get(
+                id=e_id),
+            weight = w)
+            
+        return redirect('main:today')
+    else:
+        return render(request, 'main/today.html', x)
     
     
     
