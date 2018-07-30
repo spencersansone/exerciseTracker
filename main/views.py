@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 import requests
 from .models import *
 from datetime import datetime
+# from fusioncharts import FusionCharts
 
 weekday_array = [
     "monday",
@@ -160,12 +161,35 @@ def delete_exercise(request, pk):
         x['certain_exercise'] = Exercise.objects.get(pk=pk)
         x['certain_pk'] = pk
         return render(request, 'main/delete_exercise.html', x)
+        
+def exercise_detail(request, pk):
+    certain_exercise = Exercise.objects.get(
+            id = pk)
+    
+    chart_data = []
+    chart_data += [['Date','Weight']]
+    
+    certain_exercise_data = ExerciseEntry.objects.filter(
+        exercise = certain_exercise).order_by('date')
+    
+    for entry in certain_exercise_data:
+        chart_data += [[entry.date.strftime('%m/%d/%Y'),entry.weight]]
+
+    x = {}
+    x['certain_exercise'] = Exercise.objects.get(pk=pk)
+    x['chart_data'] = chart_data
+    x['chart_title'] = certain_exercise.name
+    x['chart_x_axis_label'] = chart_data[0][0]
+    return render(request, 'main/exercise_detail.html', x)
 
 #==================================================================
     
 def exercise_entries(request):
+    
+    
     x = {}
     x['exercise_entries'] = ExerciseEntry.objects.all()
+    # x['output'] = column2d.render()
     return render(request, 'main/exercise_entries.html', x)
     
 def add_exercise_entry(request, pk):
