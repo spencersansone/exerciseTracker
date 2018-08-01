@@ -38,6 +38,40 @@ def dashboard(request):
     
     return render(request, 'main/dashboard.html', x)
     
+def routine(request):
+    
+    exercisesObj = Exercise.objects.all()
+    
+    
+    su,m,tu,w,th,f,sa = [],[],[],[],[],[],[]
+    for exercise in exercisesObj:
+        if exercise.sunday is True:
+            su += [exercise]
+        elif exercise.monday is True:
+            m += [exercise]
+        elif exercise.tuesday is True:
+            tu += [exercise]
+        elif exercise.wednesday is True:
+            w += [exercise]
+        elif exercise.thursday is True:
+            th += [exercise]
+        elif exercise.friday is True:
+            f += [exercise]
+        elif exercise.saturday is True:
+            sa += [exercise]
+    
+    array = [
+        [weekday_array[6].capitalize(),su],
+        [weekday_array[0].capitalize(),m],
+        [weekday_array[1].capitalize(),tu],
+        [weekday_array[2].capitalize(),w],
+        [weekday_array[3].capitalize(),th],
+        [weekday_array[4].capitalize(),f],
+        [weekday_array[5].capitalize(),sa]]
+    x = {}
+    x['array'] = array
+    return render(request, 'main/routine.html', x)
+    
 def today(request):
     today = datetime.now().date()
     today_weekday = weekday_array[today.weekday()]
