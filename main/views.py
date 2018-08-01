@@ -38,7 +38,7 @@ def dashboard(request):
     
 def today(request):
     today = datetime.now().date()
-    today_weekday = weekday_array[1]
+    today_weekday = weekday_array[today.weekday()]
     filter_dict = {today_weekday: True}
     
     focusesObj = Focus.objects.all()

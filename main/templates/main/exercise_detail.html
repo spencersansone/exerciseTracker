@@ -8,7 +8,6 @@
 {% block body %}
 <div class="col-sm-12">
     <h1>{{certain_exercise.name}}</h1>
-    <h1>{{chart_empty}}</h1>
 </div>
 
 {% if not chart_empty %}
@@ -39,6 +38,10 @@
     });
   </script>
   <div id="chart_div"></div>
+</div>
+{% else %}
+<div class="col-sm-12">
+  <h1>No data found for this exercise</h1>
 </div>
 {% endif %}
 
