@@ -1,11 +1,11 @@
 {% extends 'main/base.html' %}
 
-{% block title %}Delete Focus{% endblock %}
+{% block title %}Delete Exercise Focus{% endblock %}
 
 {% block body %}
 <div class="col-sm-12">
-    <h1>Are you sure that you want to delete {{certain_focus}}?</h1>
-    <form role="form" action="{% url 'main:delete_focus' pk=certain_pk %}" method="post" enctype="multipart/form-data">
+    <h1>Are you sure that you want to delete {{certain_exercise_focus}}?</h1>
+    <form role="form" action="{% url 'main:delete_exercise_focus' pk=certain_pk %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         
         <div class="form-group">

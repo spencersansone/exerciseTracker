@@ -13,19 +13,18 @@ weekday_array = [
     "saturday",
     "sunday"]
 
-
 def home(request):
     return render(request, 'main/home.html')
     
 def dashboard(request):
     
-    focusesObj = Focus.objects.all()
+    focusesObj = ExerciseFocus.objects.all()
     exercisesObj = Exercise.objects.all()
     
     a = []
     
     for focus in focusesObj.order_by('name'):
-        filtered_exercises = exercisesObj.filter(focus=focus).order_by('name')
+        filtered_exercises = exercisesObj.filter(exercise_focus=focus).order_by('name')
         exercise_array = []
         for exercise in filtered_exercises:
             exercise_array += [exercise]
@@ -41,13 +40,13 @@ def today(request):
     today_weekday = weekday_array[today.weekday()]
     filter_dict = {today_weekday: True}
     
-    focusesObj = Focus.objects.all()
+    focusesObj = ExerciseFocus.objects.all()
     exercisesObj = Exercise.objects.all()
     
     array = []
     
     for focus in focusesObj:
-        filtered_exercises = Exercise.objects.filter(focus=focus)
+        filtered_exercises = Exercise.objects.filter(exercise_focus=focus)
         filtered_exercises = filtered_exercises.filter(**filter_dict)
         exercise_array = []
         for exercise in filtered_exercises:
@@ -86,31 +85,31 @@ def today(request):
     
 #==================================================================
 
-def focuses(request):
+def exercise_focuses(request):
     x = {}
-    x['focuses'] = Focus.objects.all().order_by('name')
-    return render(request, 'main/focuses.html', x)
+    x['exercise_focuses'] = ExerciseFocus.objects.all().order_by('name')
+    return render(request, 'main/exercise_focuses.html', x)
 
-def add_focus(request):
+def add_exercise_focus(request):
     if request.method == "POST":
         n = request.POST.get('name')
         
-        Focus.objects.create(
+        ExerciseFocus.objects.create(
             name = n)
             
-        return redirect('main:focuses')
+        return redirect('main:exercise_focuses')
     else:
-        return render(request, 'main/add_focus.html')
+        return render(request, 'main/add_exercise_focus.html')
 
-def delete_focus(request, pk):
+def delete_exercise_focus(request, pk):
     if request.method == "POST":
-        Focus.objects.get(pk=pk).delete()
-        return redirect('main:focuses')
+        ExerciseFocus.objects.get(pk=pk).delete()
+        return redirect('main:exercise_focuses')
     else:
         x = {}
-        x['certain_focus'] = Focus.objects.get(pk=pk)
+        x['certain_exercise_focus'] = ExerciseFocus.objects.get(pk=pk)
         x['certain_pk'] = pk
-        return render(request, 'main/delete_focus.html', x)
+        return render(request, 'main/delete_exercise_focus.html', x)
 
 #==================================================================
 
@@ -122,7 +121,7 @@ def exercises(request):
 def add_exercise(request):
     if request.method == "POST":
         n = request.POST.get('name')
-        f = request.POST.get('focus')
+        f = request.POST.get('exercise_focus')
         wi = True if request.POST.get('weight_involved') == "on" else False
         
         sun = True if request.POST.get('sunday') == "on" else False
@@ -135,7 +134,7 @@ def add_exercise(request):
         
         Exercise.objects.create(
             name = n,
-            focus = Focus.objects.get(
+            exercise_focus = ExerciseFocus.objects.get(
                 name = f),
             weight_involved = wi,
             sunday = sun,
@@ -149,7 +148,7 @@ def add_exercise(request):
         return redirect('main:exercises')
     else:
         x = {}
-        x['focuses'] = Focus.objects.all()
+        x['exercise_focuses'] = ExerciseFocus.objects.all()
         return render(request, 'main/add_exercise.html', x)
 
 def delete_exercise(request, pk):

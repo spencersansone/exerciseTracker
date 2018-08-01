@@ -1,14 +1,14 @@
 from django.contrib import admin
 from .models import *
 
-class FocusList(admin.ModelAdmin):
+class ExerciseFocusList(admin.ModelAdmin):
     list_display = ('name',)
     ordering = ['id']
 
-admin.site.register(Focus, FocusList)
+admin.site.register(ExerciseFocus, ExerciseFocusList)
 
 class ExerciseList(admin.ModelAdmin):
-    list_display = ('name','focus','weight_involved','sunday','monday','tuesday','wednesday','thursday','friday','saturday',)
+    list_display = ('name','exercise_focus','weight_involved','sunday','monday','tuesday','wednesday','thursday','friday','saturday',)
     ordering = ['id']
 
 admin.site.register(Exercise, ExerciseList)

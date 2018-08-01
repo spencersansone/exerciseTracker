@@ -1,6 +1,6 @@
 from django.db import models
 
-class Focus(models.Model):
+class ExerciseFocus(models.Model):
     name = models.CharField(max_length=100)
     
     def __str__(self):
@@ -8,7 +8,7 @@ class Focus(models.Model):
 
 class Exercise(models.Model):
     name = models.CharField(max_length=100)
-    focus = models.ForeignKey(Focus, on_delete=models.CASCADE)
+    exercise_focus = models.ForeignKey(ExerciseFocus, on_delete=models.CASCADE)
     weight_involved = models.BooleanField()
     
     sunday = models.BooleanField()

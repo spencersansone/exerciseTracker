@@ -1,0 +1,12 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Exercise Focuses{% endblock %}
+
+{% block body %}
+<div class="col-sm-12">
+    <a href="{% url 'main:add_exercise_focus' %}"><h1>Add New Exercise Focus</h1></a>
+    {% for exercise_focus in exercise_focuses %}
+    <h1>{{exercise_focus}} <a href="{% url 'main:delete_exercise_focus' pk=exercise_focus.pk %}">del</a></h1>
+    {% endfor %}
+</div>
+{% endblock %}

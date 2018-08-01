@@ -1,10 +1,10 @@
 {% extends 'main/base.html' %}
 
-{% block title %}Add Focus{% endblock %}
+{% block title %}Add Exercise Focus{% endblock %}
 
 {% block body %}
 <div class="col-sm-12">
-    <form role="form" action="{% url 'main:add_focus' %}" method="post" enctype="multipart/form-data">
+    <form role="form" action="{% url 'main:add_exercise_focus' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         
         <div class="form-group">

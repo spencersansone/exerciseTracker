@@ -8,10 +8,10 @@
         {% csrf_token %}
         
         <div class="form-group">
-            <label for="focus">Focus <a href="{% url 'main:add_focus' %}">(Add New)</a></label>
-            <select class="form-control" name="focus">
-                {% for focus in focuses %}
-                <option>{{focus}}</option>
+            <label for="exercise_focus">Focus <a href="{% url 'main:add_exercise_focus' %}">(Add New)</a></label>
+            <select class="form-control" name="exercise_focus">
+                {% for exercise_focus in exercise_focuses %}
+                <option>{{exercise_focus}}</option>
                 {% endfor %}
             </select>
         </div>
