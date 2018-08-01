@@ -10,7 +10,7 @@
     
     <h1>{{focus_array.0}}</h1>
     {% for exercise in focus_array.1 %}
-    <h4>{{exercise}} <a href="{% url 'main:add_exercise_entry' pk=exercise.pk %}">add entry</a></h4>
+    <h4><a href="{% url 'main:exercise_detail' pk=exercise.pk %}">{{exercise}}</a> <a href="{% url 'main:add_exercise_entry' pk=exercise.pk %}">add entry</a></h4>
     {% endfor %}
     
     

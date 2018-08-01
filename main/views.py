@@ -174,8 +174,14 @@ def exercise_detail(request, pk):
     
     for entry in certain_exercise_data:
         chart_data += [[entry.date.strftime('%m/%d/%Y'),entry.weight]]
-
+    
+    if len(certain_exercise_data) is 0:
+        chart_empty = True
+    else:
+        chart_empty = False
+    
     x = {}
+    x['chart_empty'] = chart_empty
     x['certain_exercise'] = Exercise.objects.get(pk=pk)
     x['chart_data'] = chart_data
     x['chart_title'] = certain_exercise.name

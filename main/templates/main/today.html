@@ -9,10 +9,10 @@
 </div>
 
 {% for a in var %}
-<div class="col-sm-6" style="border:white solid 2px;">
+<div class="col-sm-6" style="border:white solid 2px;text-align:center;">
   <h2>{{a.0}}</h2>
   {% for b in a.1 %}
-    <h2>{{b.0.name}}</h2>
+    <a href="{% url 'main:exercise_detail' pk=b.0.id %}"><h2>{{b.0.name}}</h2></a>
     {% if not b.1 %}
         {% if b.0.weight_involved %}
         <form role="form" action="{% url 'main:today' %}" method="post" enctype="multipart/form-data">

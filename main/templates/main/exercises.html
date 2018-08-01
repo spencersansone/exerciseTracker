@@ -6,7 +6,7 @@
 <div class="col-sm-12">
     <a href="{% url 'main:add_exercise' %}"><h1>Add New Exercise</h1></a>
     {% for exercise in exercises %}
-    <h1>{{exercise}} <a href="{% url 'main:delete_exercise' pk=exercise.pk %}">del</a></h1>
+    <h1><a href="{% url 'main:exercise_detail' pk=exercise.id %}">{{exercise}}</a> <a href="{% url 'main:delete_exercise' pk=exercise.pk %}">del</a></h1>
     {% endfor %}
 </div>
 {% endblock %}

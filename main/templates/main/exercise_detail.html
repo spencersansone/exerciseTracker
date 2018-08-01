@@ -5,16 +5,14 @@
 {% block body %}
 <div class="col-sm-12">
     <h1>{{certain_exercise.name}}</h1>
+    <h1>{{chart_empty}}</h1>
+    
+    
+    
+    {% if not chart_empty %}
     <div id="chart_div" style="width: 100%; height: 500px;"></div>
     <script>
         var chart_array = {{chart_data|safe}}
-        // [
-        //   ['Year', 'Sales', 'Expenses'],
-        //   ['2013',  1000,      400],
-        //   ['2014',  1170,      460],
-        //   ['2015',  660,       1120],
-        //   ['2016',  1030,      540]
-        // ]
         var chart_title = '{{chart_title|safe}}'
     </script>
     <script type="text/javascript">
@@ -34,6 +32,7 @@
         chart.draw(data, options);
       }
     </script>
+    {% endif %}
 
 </div>
 {% endblock %}
