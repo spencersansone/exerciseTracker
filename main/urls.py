@@ -16,4 +16,5 @@ urlpatterns = [
     url(r'^dashboard/$', views.dashboard, name='dashboard'),
     url(r'^today/$', views.today, name='today'),
     url(r'^exercise_detail/(?P<pk>[0-9]+)/$', views.exercise_detail, name='exercise_detail'),
+    url(r'^help/$', views.help, name='help'),
 ]

@@ -16,6 +16,9 @@ weekday_array = [
 def home(request):
     return render(request, 'main/home.html')
     
+def help(request):
+    return render(request, 'main/help.html')
+    
 def dashboard(request):
     
     focusesObj = ExerciseFocus.objects.all()
