@@ -10,9 +10,13 @@
     {% for a in array %}
     
     <h2>{{a.0}}</h2>
-    {% for b in a.1 %}
-    <h4><a href="{% url 'main:exercise_detail' pk=b.pk %}">{{b.name}}</a></h4>
-    {% endfor %}
+    {% if a.1|length > 0 %}
+        {% for b in a.1 %}
+        <h4><a href="{% url 'main:exercise_detail' pk=b.pk %}">{{b.name}}</a></h4>
+        {% endfor %}
+    {% else %}
+    <h4 style="font-style:italic;">Rest Day</h4>
+    {% endif %}
     <br>
     {% endfor %}
 </div>

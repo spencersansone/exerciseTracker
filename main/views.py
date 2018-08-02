@@ -42,23 +42,25 @@ def routine(request):
     
     exercisesObj = Exercise.objects.all()
     
-    
     su,m,tu,w,th,f,sa = [],[],[],[],[],[],[]
+    
     for exercise in exercisesObj:
         if exercise.sunday is True:
             su += [exercise]
-        elif exercise.monday is True:
+        if exercise.monday is True:
             m += [exercise]
-        elif exercise.tuesday is True:
+        if exercise.tuesday is True:
             tu += [exercise]
-        elif exercise.wednesday is True:
+        if exercise.wednesday is True:
             w += [exercise]
-        elif exercise.thursday is True:
+        if exercise.thursday is True:
             th += [exercise]
-        elif exercise.friday is True:
+        if exercise.friday is True:
             f += [exercise]
-        elif exercise.saturday is True:
+        if exercise.saturday is True:
             sa += [exercise]
+            
+            
     
     array = [
         [weekday_array[6].capitalize(),su],
@@ -68,6 +70,8 @@ def routine(request):
         [weekday_array[3].capitalize(),th],
         [weekday_array[4].capitalize(),f],
         [weekday_array[5].capitalize(),sa]]
+        
+        
     x = {}
     x['array'] = array
     return render(request, 'main/routine.html', x)
