@@ -24,6 +24,44 @@
           </div>
           <button type="submit" class="btn btn-primary">Mark As Done</button>
         </form>
+        {% elif b.0.is_cardio %}
+          {% if b.0.cardio_type.name == "Miles and Time" %}
+          <form role="form" action="{% url 'main:today' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="weight">Weight</label>
+              <input type="number" class="form-control" name="miles" placeholder="Enter miles">
+              <input type="text" class="form-control" name="time" placeholder="Enter time">
+              <input type="hidden" class="form-control" name="exercise_id" value={{b.0.id}}>
+            </div>
+            <button type="submit" class="btn btn-primary">Mark As Done</button>
+          </form>
+          {% elif b.0.cardio_type.name == "Reps and Sets" %}
+          <form role="form" action="{% url 'main:today' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="weight">Reps:</label>
+              <input type="number" class="form-control" name="reps" placeholder="Enter reps">
+              <label for="weight">Sets:</label>
+              <input type="number" class="form-control" name="sets" placeholder="Enter sets">
+              <input type="hidden" class="form-control" name="exercise_id" value={{b.0.id}}>
+            </div>
+            <button type="submit" class="btn btn-primary">Mark As Done</button>
+          </form>
+          {% elif b.0.cardio_type.name == "Swimming" %}
+          <form role="form" action="{% url 'main:today' %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="weight">Laps:</label>
+              <input type="number" class="form-control" name="laps" placeholder="Enter laps">
+              <label for="weight">Time:</label>
+              <input type="number" class="form-control" name="time" placeholder="Enter time">
+              <input type="hidden" class="form-control" name="exercise_id" value={{b.0.id}}>
+            </div>
+            <button type="submit" class="btn btn-primary">Mark As Done</button>
+          </form>
+          {% endif %}
+          
         {% else %}
         <form role="form" action="{% url 'main:today' %}" method="post" enctype="multipart/form-data">
           {% csrf_token %}

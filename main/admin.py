@@ -18,4 +18,10 @@ class ExerciseEntryList(admin.ModelAdmin):
     ordering = ['id']
 
 admin.site.register(ExerciseEntry, ExerciseEntryList)
+
+class CardioTypeList(admin.ModelAdmin):
+    list_display = ('id',)
+    ordering = ['id']
+
+admin.site.register(CardioType, CardioTypeList)
 # Register your models here.

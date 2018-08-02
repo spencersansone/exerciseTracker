@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 import requests
 from .models import *
-from datetime import datetime
+from datetime import datetime, timedelta
 # from fusioncharts import FusionCharts
 
 weekday_array = [
@@ -105,14 +105,52 @@ def today(request):
     x['var'] = array
             
     if request.method == "POST":
-        w = request.POST.get('weight')
         e_id = request.POST.get('exercise_id')
-        
-        ExerciseEntry.objects.create(
-            date = today,
-            exercise = Exercise.objects.get(
-                id=e_id),
-            weight = w)
+        exerciseObj = Exercise.objects.get(id=e_id)
+
+        if exerciseObj.weight_involved:
+            w = request.POST.get('weight')
+            
+            ExerciseEntry.objects.create(
+                date = today,
+                exercise = exerciseObj,
+                weight = w)
+                # this works!
+        elif exerciseObj.cardio_type:
+            if exerciseObj.cardio_type.name == "Miles and Time":
+                m = request.POST.get('miles')
+                t = request.POST.get('time')
+                
+                ExerciseEntry.objects.create(
+                    date = today,
+                    exercise = exerciseObj,
+                    miles = m,
+                    time = timedelta(hours=int(t)))
+                    # so far so good, still need to change timedelta
+                    
+            elif exerciseObj.cardio_type.name == "Reps and Sets":
+                r = request.POST.get('reps')
+                s = request.POST.get('sets')
+                
+                ExerciseEntry.objects.create(
+                    date = today,
+                    exercise = exerciseObj,
+                    reps = r,
+                    sets = s)
+                    
+            elif exerciseObj.cardio_type.name == "Swimming":
+                t = request.POST.get('time')
+                l = request.POST.get('laps')
+                
+                ExerciseEntry.objects.create(
+                    date = today,
+                    exercise = exerciseObj,
+                    time = timedelta(hours=int(t)),
+                    laps = l)
+        else:
+            ExerciseEntry.objects.create(
+                date = today,
+                exercise = exerciseObj)
             
         return redirect('main:today')
     else:
@@ -159,8 +197,9 @@ def add_exercise(request):
     if request.method == "POST":
         n = request.POST.get('name')
         f = request.POST.get('exercise_focus')
+        ic = True if request.POST.get('is_cardio') == "on" else False
+        ct = request.POST.get('cardio_type')
         wi = True if request.POST.get('weight_involved') == "on" else False
-        
         sun = True if request.POST.get('sunday') == "on" else False
         mon = True if request.POST.get('monday') == "on" else False
         tue = True if request.POST.get('tuesday') == "on" else False
@@ -174,6 +213,8 @@ def add_exercise(request):
             exercise_focus = ExerciseFocus.objects.get(
                 name = f),
             weight_involved = wi,
+            is_cardio = ic,
+            cardio_type = CardioType.objects.get(name=ct) if ic else None,
             sunday = sun,
             monday = mon,
             tuesday = tue,
@@ -186,6 +227,7 @@ def add_exercise(request):
     else:
         x = {}
         x['exercise_focuses'] = ExerciseFocus.objects.all()
+        x['cardio_types'] = CardioType.objects.all()
         return render(request, 'main/add_exercise.html', x)
 
 def delete_exercise(request, pk):
