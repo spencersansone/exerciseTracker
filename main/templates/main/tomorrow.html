@@ -1,0 +1,13 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Today{% endblock %}
+
+{% block body %}
+<div class="col-sm-12" style="border:white solid 2px;text-align:center;">
+  <h1>{{tomorrow_weekday}}</h1>
+  {% for exercise in tomorrow_exercises %}
+  <h2><a href="{% url 'main:exercise_detail' pk=exercise.pk %}">{{exercise.name}}</a></h2>
+  {% endfor %}
+  <br>
+</div>
+{% endblock %}

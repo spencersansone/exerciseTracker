@@ -155,6 +155,20 @@ def today(request):
         return redirect('main:today')
     else:
         return render(request, 'main/today.html', x)
+        
+def tomorrow(request):
+    tomorrow = datetime.now().date() + timedelta(days=1)
+    tomorrow_weekday = weekday_array[tomorrow.weekday()]
+    
+    filter_dict = {tomorrow_weekday: True}
+    
+    tomorrow_exercises = Exercise.objects.filter(**filter_dict)
+    
+    x = {}
+    x['tomorrow_weekday'] = tomorrow_weekday.capitalize()
+    x['tomorrow_exercises'] = tomorrow_exercises
+    return render(request, 'main/tomorrow.html', x)
+    
     
     
     

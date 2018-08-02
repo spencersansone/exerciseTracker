@@ -18,4 +18,5 @@ urlpatterns = [
     url(r'^exercise_detail/(?P<pk>[0-9]+)/$', views.exercise_detail, name='exercise_detail'),
     url(r'^help/$', views.help, name='help'),
     url(r'^routine/$', views.routine, name='routine'),
+    url(r'^tomorrow/$', views.tomorrow, name='tomorrow'),
 ]
