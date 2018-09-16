@@ -15,10 +15,13 @@ class CardioType(models.Model):
 class Exercise(models.Model):
     name = models.CharField(max_length=100)
     exercise_focus = models.ForeignKey(ExerciseFocus, on_delete=models.CASCADE)
-    weight_involved = models.BooleanField()
     
-    is_cardio = models.BooleanField()
-    cardio_type = models.ForeignKey(CardioType, on_delete=models.CASCADE, blank=True, null=True)
+    laps = models.BooleanField()
+    miles = models.BooleanField()
+    reps = models.BooleanField()
+    sets = models.BooleanField()
+    time = models.BooleanField()
+    weight = models.BooleanField()
     
     sunday = models.BooleanField()
     monday = models.BooleanField()

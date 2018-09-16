@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 import requests
 from .models import *
 from datetime import datetime, timedelta
-# from fusioncharts import FusionCharts
+from django.db.models import Q
 
 weekday_array = [
     "monday",
@@ -78,87 +78,186 @@ def routine(request):
     
 def today(request):
     today = datetime.now().date()
-    today_weekday = weekday_array[today.weekday()]
-    filter_dict = {today_weekday: True}
-    
-    focusesObj = ExerciseFocus.objects.all()
-    exercisesObj = Exercise.objects.all()
-    
-    array = []
-    
-    for focus in focusesObj:
-        filtered_exercises = Exercise.objects.filter(exercise_focus=focus)
-        filtered_exercises = filtered_exercises.filter(**filter_dict)
-        exercise_array = []
-        for exercise in filtered_exercises:
-            doneToday = False
+    if request.method == 'POST':
+        pass
+        certain_exercise_id = request.POST.get('exercise_id') 
+        certain_exercise = Exercise.objects.get(id=certain_exercise_id)
+        
+        attribute_d = {
+            'date': today,
+            'exercise': certain_exercise
+        }
+        
+        if certain_exercise.weight:
+            w = float(request.POST.get('weight'))
+            attribute_d['weight'] =  w
+        if certain_exercise.miles:
+            m = float(request.POST.get('miles'))
+            attribute_d['miles'] =  m
+        if certain_exercise.time:
+            hours = int(request.POST.get('hours'))
+            minutes = int(request.POST.get('minutes'))
+            seconds = int(request.POST.get('seconds'))
+            t = timedelta(hours=hours, minutes=minutes, seconds=seconds)
             
-            entries_done_today = ExerciseEntry.objects.filter(
-                date=today,
-                exercise=exercise)
-            print(entries_done_today)
-                
-            if len(entries_done_today) is not 0:
-                doneToday = True
-                
-            exercise_array += [[exercise,doneToday]]
-        if len(exercise_array) is not 0:
-            array += [[focus,exercise_array]]
-    x = {}
-    x['today_weekday'] = today_weekday.capitalize()
-    x['var'] = array
+            attribute_d['time'] =  t
+        if certain_exercise.laps:
+            l = int(request.POST.get('laps'))
+            attribute_d['laps'] = l
+        if certain_exercise.reps:
+            r = int(request.POST.get('reps'))
+            attribute_d['reps'] =  r
+        if certain_exercise.sets:
+            s = int(request.POST.get('sets'))
+            attribute_d['sets'] =  s
             
-    if request.method == "POST":
-        e_id = request.POST.get('exercise_id')
-        exerciseObj = Exercise.objects.get(id=e_id)
-
-        if exerciseObj.weight_involved:
-            w = request.POST.get('weight')
-            
-            ExerciseEntry.objects.create(
-                date = today,
-                exercise = exerciseObj,
-                weight = w)
-                # this works!
-        elif exerciseObj.cardio_type:
-            if exerciseObj.cardio_type.name == "Miles and Time":
-                m = request.POST.get('miles')
-                t = request.POST.get('time')
-                
-                ExerciseEntry.objects.create(
-                    date = today,
-                    exercise = exerciseObj,
-                    miles = m,
-                    time = timedelta(hours=int(t)))
-                    # so far so good, still need to change timedelta
-                    
-            elif exerciseObj.cardio_type.name == "Reps and Sets":
-                r = request.POST.get('reps')
-                s = request.POST.get('sets')
-                
-                ExerciseEntry.objects.create(
-                    date = today,
-                    exercise = exerciseObj,
-                    reps = r,
-                    sets = s)
-                    
-            elif exerciseObj.cardio_type.name == "Swimming":
-                t = request.POST.get('time')
-                l = request.POST.get('laps')
-                
-                ExerciseEntry.objects.create(
-                    date = today,
-                    exercise = exerciseObj,
-                    time = timedelta(hours=int(t)),
-                    laps = l)
-        else:
-            ExerciseEntry.objects.create(
-                date = today,
-                exercise = exerciseObj)
-            
+        ExerciseEntry.objects.create(**attribute_d)
+        
         return redirect('main:today')
     else:
+        today_weekday = weekday_array[today.weekday()]
+        all_focuses = ExerciseFocus.objects.all()
+        all_exercises = Exercise.objects.all()
+        l = []
+        
+        for focus in all_focuses:
+            filtered_exercises = all_exercises.filter(
+                Q(**{today_weekday: True}) & Q(exercise_focus=focus))
+            exercise_l = []
+            
+            for exercise in filtered_exercises:
+                entries_done_today = ExerciseEntry.objects.filter(
+                    date=today,
+                    exercise = exercise,)
+                
+                if len(entries_done_today) != 0:
+                    doneToday = True
+                else:
+                    doneToday = False
+                    
+                exercise_l += [[exercise,doneToday]]
+                
+            if len(exercise_l) != 0:
+                l += [[focus,exercise_l]]
+        x = {}
+        x['today_weekday'] = today_weekday.capitalize()
+        x['var'] = l
         return render(request, 'main/today.html', x)
+    
+# def OLD_today(request):
+#     today = datetime.now().date()
+#     today_weekday = weekday_array[today.weekday()]
+#     filter_dict = {today_weekday: True}
+    
+#     focusesObj = ExerciseFocus.objects.all()
+#     exercisesObj = Exercise.objects.all()
+    
+#     array = []
+    
+#     for focus in focusesObj:
+#         filtered_exercises = Exercise.objects.filter(exercise_focus=focus)
+#         filtered_exercises = filtered_exercises.filter(**filter_dict)
+#         exercise_array = []
+#         for exercise in filtered_exercises:
+#             doneToday = False
+            
+#             entries_done_today = ExerciseEntry.objects.filter(
+#                 date=today,
+#                 exercise=exercise)
+#             print(entries_done_today)
+                
+#             if len(entries_done_today) is not 0:
+#                 doneToday = True
+                
+#             exercise_array += [[exercise,doneToday]]
+#         if len(exercise_array) is not 0:
+#             array += [[focus,exercise_array]]
+#     x = {}
+#     x['today_weekday'] = today_weekday.capitalize()
+#     x['var'] = array
+#     return render(request, 'main/today.html', x)
+            
+#     if request.method == "POST":
+#         e_id = request.POST.get('exercise_id') 
+#         exerciseObj = Exercise.objects.get(id=e_id)
+        
+#         if exerciseObj.weight_involved:
+#             w = request.POST.get('weight')
+            
+#             ExerciseEntry.objects.create(
+#                 date = today,
+#                 exercise = exerciseObj,
+#                 weight = w)
+#                 # this works!
+#         elif exerciseObj.cardio_type:
+#             if exerciseObj.cardio_type.name == "Miles and Time":
+#                 m = request.POST.get('miles')
+#                 t = request.POST.get('time')
+                
+#                 ExerciseEntry.objects.create(
+#                     date = today,
+#                     exercise = exerciseObj,
+#                     miles = m,
+#                     time = timedelta(hours=int(t)))
+#                     # so far so good, still need to change timedelta
+                    
+#             elif exerciseObj.cardio_type.name == "Reps and Sets":
+#                 r = request.POST.get('reps')
+#                 s = request.POST.get('sets')
+                
+#                 ExerciseEntry.objects.create(
+#                     date = today,
+#                     exercise = exerciseObj,
+#                     reps = r,
+#                     sets = s)
+                    
+#             elif exerciseObj.cardio_type.name == "Swimming":
+#                 t = request.POST.get('time')
+#                 l = request.POST.get('laps')
+                
+#                 ExerciseEntry.objects.create(
+#                     date = today,
+#                     exercise = exerciseObj,
+#                     time = timedelta(hours=int(t)),
+#                     laps = l)
+#         else:
+#             ExerciseEntry.objects.create(
+#                 date = today,
+#                 exercise = exerciseObj)
+            
+#         return redirect('main:today')
+#     else:
+#         today = datetime.now().date()
+#         today_weekday = weekday_array[today.weekday()]
+#         filter_dict = {today_weekday: True}
+        
+#         focusesObj = ExerciseFocus.objects.all()
+#         exercisesObj = Exercise.objects.all()
+        
+#         array = []
+        
+#         for focus in focusesObj:
+#             filtered_exercises = Exercise.objects.filter(exercise_focus=focus)
+#             filtered_exercises = filtered_exercises.filter(**filter_dict)
+#             exercise_array = []
+#             for exercise in filtered_exercises:
+#                 doneToday = False
+                
+#                 entries_done_today = ExerciseEntry.objects.filter(
+#                     date=today,
+#                     exercise=exercise)
+#                 print(entries_done_today)
+                    
+#                 if len(entries_done_today) is not 0:
+#                     doneToday = True
+                    
+#                 exercise_array += [[exercise,doneToday]]
+#             if len(exercise_array) is not 0:
+#                 array += [[focus,exercise_array]]
+#         x = {}
+#         x['today_weekday'] = today_weekday.capitalize()
+#         x['var'] = array
+#         return render(request, 'main/today.html', x)
         
 def tomorrow(request):
     tomorrow = datetime.now().date() + timedelta(days=1)
@@ -213,11 +312,18 @@ def exercises(request):
     
 def add_exercise(request):
     if request.method == "POST":
+        
         n = request.POST.get('name')
+        
         f = request.POST.get('exercise_focus')
-        ic = True if request.POST.get('is_cardio') == "on" else False
-        ct = request.POST.get('cardio_type')
-        wi = True if request.POST.get('weight_involved') == "on" else False
+        
+        laps = True if request.POST.get('laps') == "on" else False
+        miles = True if request.POST.get('miles') == "on" else False
+        reps = True if request.POST.get('reps') == "on" else False
+        sets = True if request.POST.get('sets') == "on" else False
+        time = True if request.POST.get('time') == "on" else False
+        weight = True if request.POST.get('weight') == "on" else False
+        
         sun = True if request.POST.get('sunday') == "on" else False
         mon = True if request.POST.get('monday') == "on" else False
         tue = True if request.POST.get('tuesday') == "on" else False
@@ -230,9 +336,12 @@ def add_exercise(request):
             name = n,
             exercise_focus = ExerciseFocus.objects.get(
                 name = f),
-            weight_involved = wi,
-            is_cardio = ic,
-            cardio_type = CardioType.objects.get(name=ct) if ic else None,
+            laps = laps,
+            miles = miles,
+            reps = reps,
+            sets = sets,
+            time = time,
+            weight = weight,
             sunday = sun,
             monday = mon,
             tuesday = tue,
